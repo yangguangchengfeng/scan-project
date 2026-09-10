@@ -59,9 +59,17 @@
 - 指向源码、库表、字段解释、启动项：**绝对路径**
 - 产出目录内互链：相对文件名（`技术栈.md`、`最小地图.md`、`推断功能.md`）
 
-## TFVC（仅修改源码时；扫描禁止调用）
+## 版本管理怎么记（每条项目根单独记）
 
-- 改已有文件前：`tf checkout <绝对路径>`（不在 PATH 则用 VS Team Explorer 下 `TF.exe` 全路径）
-- 占用：输出含 `locked for check-out by USER`、`checked out by USER in workspace WS`、`锁定`、`TF14098`。把 **USER / 工作区** 告诉用户，**不改该文件**。解析不到人名则贴 `tf` 原文，仍不改
-- 新文件写入后：`tf add <绝对路径>`
-- 找不到 `tf.exe` 或不在工作区：说明原因，不假装已签出
+不要假设前端一定 Git、后端一定 TFS。用户在路径上标明了就用用户的；未标明则：
+
+- 根下有 `.git`：记 Git
+- `tf workfold <该根>` 成功或存在 `$tf`：记 TFVC
+- 都没有：写「未见」，开发前再问用户
+
+## 改代码时（扫描禁止）
+
+按将改文件所属项目根：
+
+- **Git**：直接改；不要 `tf checkout` / `tf add`；不要在扫描阶段 `git commit` / `push`
+- **TFVC**：改已有文件前 `tf checkout <绝对路径>`（不在 PATH 则用 VS Team Explorer 下 `TF.exe` 全路径）。占用：输出含 `locked for check-out by USER`、`checked out by USER in workspace WS`、`锁定`、`TF14098`。把 **USER / 工作区** 告诉用户，**不改该文件**。解析不到人名则贴 `tf` 原文，仍不改。新文件写入后 `tf add`。找不到 `tf.exe` 或不在工作区：说明原因，不假装已签出
